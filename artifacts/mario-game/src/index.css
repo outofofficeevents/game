@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-sky: #5c94fc;
+  --color-sky-deep: #3262d4;
+  --color-brick: #b8470c;
+  --color-brick-dark: #802f06;
+  --color-gold: #fbd000;
+  --color-grass: #008c2c;
+  --color-grass-dark: #005a1c;
+  --color-pipe: #00a800;
+  --color-pipe-dark: #006400;
+  --color-game-red: #e52521;
+  --color-game-blue: #1e3a8a;
+  --color-game-skin: #fcc89e;
+  --color-game-brown: #6b3410;
+
+  --font-display: "Press Start 2P", system-ui, monospace;
+}
+
+:root {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+@layer utilities {
+  .pixelated {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+}

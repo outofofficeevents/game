@@ -1,10 +1,11 @@
-# [Project name]
+# Out of Office: The Game
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+An office-themed Mario-style platformer where you dodge your Boss, email notifications, and Teams pings while collecting PTO hours (clock icons). Power-ups include coffee (speed), headphones (invincibility), and WFH mode (floaty jumping).
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/mario-game run dev` — run the game (port 22036, preview at `/`)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 8080, preview at `/api`)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
@@ -14,6 +15,7 @@ _Replace the heading above with the project's name, and this line with one sente
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
+- Game: React + Vite, HTML5 Canvas (custom engine)
 - API: Express 5
 - DB: PostgreSQL + Drizzle ORM
 - Validation: Zod (`zod/v4`), `drizzle-zod`
@@ -22,15 +24,27 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- Game source: `artifacts/mario-game/src/game/` — engine, level, renderer, types
+- Game page: `artifacts/mario-game/src/pages/Game.tsx`
+- Logo asset: `attached_assets/OOO-logo_1777181952692.png`
+- API server: `artifacts/api-server/src/`
+- DB schema: `lib/db/src/schema/`
+- API spec: `lib/api-spec/openapi.yaml`
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Game runs entirely on HTML5 Canvas — no game engine framework, custom physics in `engine.ts`
+- Level design is hardcoded in `level.ts` (tile grid, enemy placements, power-up locations)
+- Game is portrait-oriented (450×800 viewport) designed for mobile/touch with swipe and tap controls
+- `@assets` alias in Vite resolves to `attached_assets/` at workspace root for logo/images
+- The game artifact sits at previewPath `/` so it's the root experience
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Platformer game: dodge Boss, Email, and Teams enemies; collect clock icons (PTO hours)
+- Power-ups: ☕ Coffee (speed boost), 🎧 Headphones (invincibility), 🏠 WFH (floaty gravity)
+- Score system: coins + enemy stomps + time bonus at flag
+- Touch and keyboard controls; start overlay with instructions
 
 ## User preferences
 
@@ -38,8 +52,11 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- The game's vite.config.ts requires both `PORT` and `BASE_PATH` env vars (set via artifact.toml)
+- `@assets` alias points to `attached_assets/` two directories above the artifact root
+- Game viewport is fixed at 450×800 — renderer uses this hardcoded size
 
 ## Pointers
 
 - See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- See the `react-vite` skill for frontend build patterns

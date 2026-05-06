@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Out of Office: The Game"
+version = "1.0.0"
+id = "artifacts/mario-game"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22036
+
+[services.development]
+run = "pnpm --filter @workspace/mario-game run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mario-game", "run", "build" ]
+publicDir = "artifacts/mario-game/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22036"
+BASE_PATH = "/"
