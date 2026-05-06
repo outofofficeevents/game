@@ -5,22 +5,10 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
-
-export interface SubmitScoreRequest {
-  playerName: string;
-  score: number;
-}
 
 export interface ScoreEntry {
   id: number;
   playerName: string;
   score: number;
   createdAt: string;
-}
-
-export interface LeaderboardResponse {
-  entries: ScoreEntry[];
 }

@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: scores
+    description: Leaderboard scores
 paths:
   /healthz:
     get:
@@ -24,6 +26,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /scores:
+    post:
+      operationId: submitScore
+      tags: [scores]
+      summary: Submit a score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitScoreRequest"
+      responses:
+        "201":
+          description: Score submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScoreEntry"
+  /scores/leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [scores]
+      summary: Get top scores leaderboard
+      responses:
+        "200":
+          description: Top scores
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeaderboardResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +65,38 @@ components:
           type: string
       required:
         - status
-
+    SubmitScoreRequest:
+      type: object
+      properties:
+        playerName:
+          type: string
+        score:
+          type: integer
+      required:
+        - playerName
+        - score
+    ScoreEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        playerName:
+          type: string
+        score:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - playerName
+        - score
+        - createdAt
+    LeaderboardResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScoreEntry"
+      required:
+        - entries

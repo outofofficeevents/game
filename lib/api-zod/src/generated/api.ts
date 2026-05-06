@@ -14,3 +14,25 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * @summary Submit a score
+ */
+export const SubmitScoreBody = zod.object({
+  playerName: zod.string(),
+  score: zod.number(),
+});
+
+/**
+ * @summary Get top scores leaderboard
+ */
+export const GetLeaderboardResponse = zod.object({
+  entries: zod.array(
+    zod.object({
+      id: zod.number(),
+      playerName: zod.string(),
+      score: zod.number(),
+      createdAt: zod.string(),
+    }),
+  ),
+});
