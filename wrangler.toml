@@ -1,0 +1,7 @@
+name = "out-of-office-the-game"
+main = "artifacts/api-server/dist/index.mjs"
+compatibility_date = "2025-05-11"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "artifacts/mario-game/dist/public"
