@@ -330,6 +330,28 @@ function drawClock(ctx: CanvasRenderingContext2D, c: Coin, t: number): void {
   ctx.fill();
 }
 
+function drawEnemyGlow(ctx: CanvasRenderingContext2D, e: Enemy): void {
+  const cx = e.x + e.w / 2;
+  const cy = e.y + e.h / 2;
+  const color = e.kind === "boss" ? BRAND_PINK : e.kind === "teams" ? "#5b5fc7" : "#e63946";
+  const r = e.w * 1.1;
+  const glow = ctx.createRadialGradient(cx, cy, 4, cx, cy, r);
+  glow.addColorStop(0, color + "88");
+  glow.addColorStop(1, color + "00");
+  ctx.fillStyle = glow;
+  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+
+  const t = performance.now() / 1000;
+  const bounce = Math.abs(Math.sin(t * 4)) * 6;
+  ctx.font = "bold 14px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#fff";
+  ctx.fillText("!", cx, e.y - 10 - bounce);
+  ctx.fillStyle = BRAND_PINK;
+  ctx.fillText("!", cx, e.y - 11 - bounce);
+}
+
 function drawEnemy(ctx: CanvasRenderingContext2D, e: Enemy): void {
   if (!e.alive) {
     if (e.squashedAt === null || e.squashedAt > 0.6) return;
@@ -339,6 +361,7 @@ function drawEnemy(ctx: CanvasRenderingContext2D, e: Enemy): void {
     ctx.fillRect(e.x + 6, e.y + e.h - 5, e.w - 12, 2);
     return;
   }
+  drawEnemyGlow(ctx, e);
   if (e.kind === "boss") {
     drawBoss(ctx, e);
     if (e.phrase) drawSpeechBubble(ctx, e);
