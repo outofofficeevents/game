@@ -4,6 +4,7 @@ import { createGameState, resetGame, update, VIEW_H, VIEW_W } from "@/game/engin
 import { render } from "@/game/renderer";
 import type { GameState, Input } from "@/game/types";
 import oooLogo from "@assets/OOO-logo_1777181952692.png";
+import { startMusic, setMuted, isMuted } from "@/game/music";
 import {
   useSubmitScore,
   useGetLeaderboard,
@@ -34,6 +35,13 @@ export default function Game() {
   const [phase, setPhase] = useState<Phase>("playing");
   const [finalScore, setFinalScore] = useState(0);
   const [wonGame, setWonGame] = useState(false);
+  const [muted, setMutedState] = useState(false);
+
+  const toggleMute = () => {
+    const next = !isMuted();
+    setMuted(next);
+    setMutedState(next);
+  };
 
   const queryClient = useQueryClient();
 
@@ -95,6 +103,7 @@ export default function Game() {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA") return;
       const k = e.key.toLowerCase();
+      if (down) startMusic();
       const hold = keyHoldRef.current;
       if (k === "arrowleft" || k === "a") {
         hold.left = down;
@@ -148,6 +157,7 @@ export default function Game() {
 
     const onStart = (e: TouchEvent) => {
       e.preventDefault();
+      startMusic();
       for (const t of Array.from(e.changedTouches)) {
         touches.set(t.identifier, {
           startX: t.clientX,
@@ -210,6 +220,7 @@ export default function Game() {
   };
 
   const onCanvasClick = () => {
+    startMusic();
     setShowOverlay(false);
     if (phase !== "playing") return;
     const state = stateRef.current;
@@ -236,6 +247,13 @@ export default function Game() {
             className="w-full h-6 sm:h-8 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]"
           />
         </div>
+        <button
+          onClick={(e) => { e.stopPropagation(); toggleMute(); }}
+          className="absolute top-10 right-2 z-50 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 text-base leading-none select-none"
+          aria-label={muted ? "Unmute" : "Mute"}
+        >
+          {muted ? "🔇" : "🔊"}
+        </button>
         {showOverlay && phase === "playing" && (
           <StartOverlay onDismiss={() => setShowOverlay(false)} />
         )}
@@ -280,10 +298,12 @@ function StartOverlay({ onDismiss }: { onDismiss: () => void }) {
       <p className="md:text-base mt-4 mb-8 text-white-300 text-[16px]">Are you ready to clock out and tap in!<br />The party isn't until <i><b>Friday, October 16th</b></i> but, in the meantime, you can play Out of Office: The Game.</p>
       <div className="space-y-3 text-center text-sm max-w-xs">
         <p className="text-white-200 text-[16px]">
-          <span className="font-bold" style={{ color: BRAND_PINK }}>SWIPE</span>{" "}to walk
+          <span className="font-bold" style={{ color: BRAND_PINK }}>SWIPE</span>{" "}or{" "}
+          <span className="font-bold" style={{ color: BRAND_PINK }}>← → KEYS</span>{" "}to walk
         </p>
         <p className="text-white-200 text-[16px]">
-          <span className="font-bold" style={{ color: BRAND_PINK }}>TAP</span>{" "}to jump
+          <span className="font-bold" style={{ color: BRAND_PINK }}>TAP</span>{" "}or{" "}
+          <span className="font-bold" style={{ color: BRAND_PINK }}>SPACE</span>{" "}to jump
         </p>
         <p className="text-white-200 mt-4 text-[16px]">
           <span className="font-bold" style={{ color: BRAND_ORANGE }}>🕐 CLOCK</span>{" "}collect for PTO hours
