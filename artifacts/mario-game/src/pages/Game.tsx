@@ -33,6 +33,7 @@ export default function Game() {
 
   const [showOverlay, setShowOverlay] = useState(true);
   const [phase, setPhase] = useState<Phase>("playing");
+  const pausedRef = useRef(true);
   const [finalScore, setFinalScore] = useState(0);
   const [wonGame, setWonGame] = useState(false);
   const [muted, setMutedState] = useState(false);
@@ -58,10 +59,17 @@ export default function Game() {
     let last = performance.now();
 
     const loop = (now: number) => {
+      const state = stateRef.current;
+
+      if (pausedRef.current) {
+        last = now;
+        render(ctx, state);
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+
       const dt = Math.min(0.033, (now - last) / 1000);
       last = now;
-
-      const state = stateRef.current;
 
       const k = keyHoldRef.current;
       const sw = swipeRef.current;
@@ -158,6 +166,11 @@ export default function Game() {
     const onStart = (e: TouchEvent) => {
       e.preventDefault();
       startMusic();
+      if (pausedRef.current) {
+        resetGame(stateRef.current);
+        pausedRef.current = false;
+      }
+      setShowOverlay(false);
       for (const t of Array.from(e.changedTouches)) {
         touches.set(t.identifier, {
           startX: t.clientX,
@@ -167,7 +180,6 @@ export default function Game() {
           moved: false,
         });
       }
-      setShowOverlay(false);
     };
 
     const onMove = (e: TouchEvent) => {
@@ -211,6 +223,15 @@ export default function Game() {
     };
   }, []);
 
+  const handleStartGame = () => {
+    if (pausedRef.current) {
+      resetGame(stateRef.current);
+      pausedRef.current = false;
+    }
+    setShowOverlay(false);
+    startMusic();
+  };
+
   const handleRestart = () => {
     if (endTimerRef.current) clearTimeout(endTimerRef.current);
     prevStatusRef.current = "playing";
@@ -220,8 +241,7 @@ export default function Game() {
   };
 
   const onCanvasClick = () => {
-    startMusic();
-    setShowOverlay(false);
+    handleStartGame();
     if (phase !== "playing") return;
     const state = stateRef.current;
     if (state.status !== "playing") {
@@ -255,7 +275,7 @@ export default function Game() {
           {muted ? "🔇" : "🔊"}
         </button>
         {showOverlay && phase === "playing" && (
-          <StartOverlay onDismiss={() => setShowOverlay(false)} />
+          <StartOverlay onDismiss={handleStartGame} />
         )}
         {phase === "entering-name" && (
           <NameEntryOverlay
