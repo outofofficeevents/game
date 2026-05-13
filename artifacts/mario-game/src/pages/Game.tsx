@@ -227,11 +227,11 @@ export default function Game() {
           className="absolute inset-0 w-full h-full pixelated"
           style={{ touchAction: "none" }}
         />
-        <div className="absolute bottom-0 left-0 right-0 z-20 flex items-end justify-center pointer-events-none px-3 pb-2 pt-6 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 z-20 flex items-end justify-center pointer-events-none px-3 pb-1 pt-1 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
           <img
             src={oooLogo}
             alt="Out of Office"
-            className="w-full h-10 sm:h-12 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]"
+            className="w-full h-6 sm:h-8 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]"
           />
         </div>
         {showOverlay && phase === "playing" && (
