@@ -162,9 +162,9 @@ export function buildLevel(): Level {
     enemies.push(enemy);
   };
 
-  enemyAt(12, "teams");
-  enemyAt(20, "email");
-  enemyAt(30, "boss");
+  enemyAt(5, "teams");
+  enemyAt(12, "email");
+  enemyAt(20, "boss");
   enemyAt(43, "email");
   enemyAt(50, "teams");
   enemyAt(63, "boss");
