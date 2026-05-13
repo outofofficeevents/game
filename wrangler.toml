@@ -1,5 +1,7 @@
 name = "out-of-office-the-game"
 compatibility_date = "2025-05-11"
+main = "worker.js"
 
 [assets]
 directory = "artifacts/mario-game/dist/public"
+binding = "ASSETS"
