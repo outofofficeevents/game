@@ -1,4 +1,4 @@
-name = "out-of-office-the-game"
+name = "game"
 compatibility_date = "2025-05-11"
 main = "worker.js"
 
