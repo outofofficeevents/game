@@ -92,6 +92,8 @@ export default function Game() {
 
   useEffect(() => {
     const onKey = (down: boolean) => (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
       const k = e.key.toLowerCase();
       const hold = keyHoldRef.current;
       if (k === "arrowleft" || k === "a") {
